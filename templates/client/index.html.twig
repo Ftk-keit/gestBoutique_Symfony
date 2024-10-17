@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClientController!
+{% endblock %}
+
+{% block body %}
+	<!-- Header -->
+	<header class="bg-[#1E375A] text-white p-4">
+		<h1 class="text-2xl font-bold">Gestion des Clients</h1>
+	</header>
+
+	<div
+		class="flex flex-1">
+		<!-- Sidebar -->
+		<nav class="w-64 bg-[#1E375A] text-white p-4">
+			<ul>
+				<li class="mb-2">
+					<a href="#" class="hover:text-gray-300">Tableau de bord</a>
+				</li>
+				<li class="mb-2">
+					<a href="#" class="hover:text-gray-300">Clients</a>
+				</li>
+				<li class="mb-2">
+					<a href="#" class="hover:text-gray-300">Produits</a>
+				</li>
+				<li class="mb-2">
+					<a href="#" class="hover:text-gray-300">Commandes</a>
+				</li>
+			</ul>
+		</nav>
+
+		<!-- Main Content -->
+		<main class="flex-1 p-4">
+			<div
+				class="flex gap-4">
+				<!-- Client Creation Form -->
+				<div class="w-1/2">
+					<h2 class="text-xl font-semibold mb-4">Créer un nouveau client</h2>
+					<form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="post" action="{{ path('client_new') }}">
+						{{ form_start(form) }}
+
+						
+						<div class="mb-4">
+							{{ form_label(form.surname) }}
+							{{ form_widget(form.surname) }}
+						</div>
+
+						
+
+						<div class="mb-4">
+							{{ form_label(form.telephone) }}
+							{{ form_widget(form.telephone) }}
+						</div>
+
+						<div class="mb-4">
+							{{ form_label(form.adresse) }}
+							{{ form_widget(form.adresse) }}
+						</div>
+
+						<div class="flex items-center justify-between">
+							<button class="bg-[#1E375A] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+								Créer le client
+							</button>
+						</div>
+
+						{{ form_end(form) }}
+					</form>
+				</div>
+
+				<!-- Client List -->
+				<div class="w-1/2">
+					<h2 class="text-xl font-semibold mb-4">Liste des clients</h2>
+					<div class="mb-4">
+						<input type="text" placeholder="Rechercher par téléphone" class="w-full p-2 border rounded">
+					</div>
+					<div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+						<ul>
+							<li class="mb-2 pb-2 border-b flex justify-between items-start">
+								<div>
+									<div class="font-bold">Jean Dupont</div>
+									<div class="text-sm text-gray-600">Prénom: Jean</div>
+									<div class="text-sm text-gray-600">Email: jean.dupont@email.com</div>
+									<div class="text-sm text-gray-600">Téléphone: 01 23 45 67 89</div>
+									<div class="text-sm text-gray-600">Adresse: 123 Rue de Paris, 75001 Paris</div>
+								</div>
+								<button class="text-red-500 hover:text-red-700">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+									</svg>
+								</button>
+							</li>
+							<li class="mb-2 pb-2 border-b flex justify-between items-start">
+								<div>
+									<div class="font-bold">Marie Martin</div>
+									<div class="text-sm text-gray-600">Prénom: Marie</div>
+									<div class="text-sm text-gray-600">Email: marie.martin@email.com</div>
+									<div class="text-sm text-gray-600">Téléphone: 01 98 76 54 32</div>
+									<div class="text-sm text-gray-600">Adresse: 456 Avenue de Londres, 75002 Paris</div>
+								</div>
+								<button class="text-red-500 hover:text-red-700">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+									</svg>
+								</button>
+							</li>
+							<li class="mb-2 pb-2 flex justify-between items-start">
+								<div>
+									<div class="font-bold">Pierre Durand</div>
+									<div class="text-sm text-gray-600">Prénom: Pierre</div>
+									<div class="text-sm text-gray-600">Email: pierre.durand@email.com</div>
+									<div class="text-sm text-gray-600">Téléphone: 01 11 22 33 44</div>
+									<div class="text-sm text-gray-600">Adresse: 789 Boulevard de New York, 75003 Paris</div>
+								</div>
+								<button class="text-red-500 hover:text-red-700">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<!-- Footer -->
+	<footer class="bg-[#1E375A] text-white p-4 text-center">
+		<p>&copy; 2023 Gestion des Clients. Tous droits réservés.</p>
+	</footer>
+
+{% endblock %}
