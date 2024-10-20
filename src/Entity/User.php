@@ -4,10 +4,11 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,6 +29,9 @@ class User
 
     #[ORM\OneToOne(inversedBy: 'account', cascade: ['persist', 'remove'])]
     private ?Client $client = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $login = null;
 
     public function getId(): ?int
     {
@@ -90,6 +94,18 @@ class User
     public function setClient(?Client $client): static
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getLogin(): ?string
+    {
+        return $this->login;
+    }
+
+    public function setLogin(string $login): static
+    {
+        $this->login = $login;
 
         return $this;
     }
