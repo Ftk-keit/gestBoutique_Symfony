@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Dtos\ClientDto;
 use App\Entity\Client;
 use App\Form\ClientFormType;
+use App\Form\DetteFilterType;
 use App\Form\SearchClientFormType;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,33 +29,36 @@ class ClientController extends AbstractController
         $page = $request->query->getInt('page',1);
         $limit = 5;
         $clients = $this->clientRepository->paginateClients(   $page, $limit);
-        $count = $this->clientRepository->countClients();
-        $maxPage = ceil( $count / $limit);
+      
 
-        $data = array_map(function($client) {
-            return [
-                'id' => $client->getId(),
-                'surname' => $client->getSurname(),
-                'telephone' => $client->getTelephone(),
-                'adresse' => $client->getAdresse(),
-            ];
-        }, iterator_to_array($clients->getIterator()));
+        // $data = array_map(function($client) {
+        //     return [
+        //         'id' => $client->getId(),
+        //         'surname' => $client->getSurname(),
+        //         'telephone' => $client->getTelephone(),
+        //         'adresse' => $client->getAdresse(),
+        //     ];
+        // }, iterator_to_array($clients->getIterator()));
         
         $form = $this->createForm(ClientFormType::class, $client);
-        $formSearch = $this->createForm(SearchClientFormType::class);
+        $clientDto = new ClientDto();
+        $formSearch = $this->createForm(SearchClientFormType::class, $clientDto);
         $formSearch->handleRequest($request);
 
 
         
 
         if ($formSearch->isSubmitted() && $formSearch->isValid()) { 
-            $data = $this->clientRepository->findBy(['telephone' => $formSearch->get('telephone')->getData()]);
+            // $formSearch->get('telephone')->getData()
+            $clients = $this->clientRepository->findByClient($clientDto, $page, $limit);
 
         } 
+        $count = $clients->count();
+        $maxPage = ceil( $count / $limit);
         return $this->render('client/index.html.twig', [
             'form' => $form->createView(),
             'formSearch' => $formSearch->createView(),
-            'clients' => $data,
+            'clients' => $clients,
             'maxPage' => $maxPage,
             'page' => $page,
 
@@ -79,6 +84,17 @@ class ClientController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
+    #[Route('client/dettes/{idClient}', name: 'dettesbyClient')]
+    public function getDettesByClient(int $idClient , ClientRepository $clientRepository ): Response
+    {
+        $form = $this->createForm(DetteFilterType::class);
+        $client = $clientRepository->find($idClient);
+        return $this->render('client/dettes.html.twig', [
+            'controller_name' => 'DetteController',
+            'client'=> $client,
+            'form'=> $form->createView(),
+        ]);
+    }
+    
     
 }

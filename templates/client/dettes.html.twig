@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClientController!
+{% endblock %}
+
+{% block body %}
+	<!-- Header -->
+	<header class="bg-[#1E375A] text-white p-4">
+		<h1 class="text-2xl font-bold">Gestion des Clients</h1>
+	</header>
+
+	<div
+		class="flex flex-1 h-[850px]">
+		<!-- Sidebar -->
+		<nav class="w-64 bg-[#1E375A] text-white p-4">
+			<ul>
+				<li class="mb-2">
+					<a href="#" class="hover:text-gray-300">Tableau de bord</a>
+				</li>
+				<li class="mb-2">
+					<a href="/client" class="hover:text-gray-300">Clients</a>
+				</li>
+				<li class="mb-2">
+					<a href="#" class="hover:text-gray-300">Produits</a>
+				</li>
+				<li class="mb-2">
+					<a href="#" class="hover:text-gray-300">Commandes</a>
+				</li>
+			</ul>
+		</nav>
+
+		<!-- Main Content -->
+		<main class="flex-1 p-4">
+			<div class="container mx-auto px-4">
+				<h1 class="text-3xl font-bold text-base mb-6">Dettes du client</h1>
+
+				<!-- Informations du client -->
+				<div class="bg-white shadow-md rounded-lg p-6 mb-6">
+					<h2 class="text-xl font-semibold text-base mb-4">Informations du client</h2>
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div>
+							<p class="text-sm font-medium text-gray-600">Surname</p>
+							<p class="text-lg">{{client.surname}}</p>
+						</div>
+
+						<div>
+							<p class="text-sm font-medium text-gray-600">Téléphone</p>
+							<p class="text-lg">{{client.telephone}}</p>
+						</div>
+						<div>
+							<p class="text-sm font-medium text-gray-600">Adresse</p>
+							<p class="text-lg">{{client.adresse}}</p>
+						</div>
+					</div>
+				</div>
+				<div class="mb-4">
+				{{form_start(form, {'attr': {'class': 'flex , justify-start'}})}}
+				{{ form_widget(form.status) }}
+				{{ form_end(form) }}
+					{# <button id="all" class="bg-[#1E375A] text-white px-4 py-2 rounded mr-2">Toutes</button>
+					<button id="unpaid" class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Impayées</button>
+					<button id="paid" class="bg-gray-300 text-gray-700 px-4 py-2 rounded">Payées</button> #}
+				</div>
+				<!-- Tableau des dettes -->
+				<div class="overflow-x-auto bg-white shadow-md rounded-lg">
+					<div class="mb-4 ">
+					{# {{form_start(form,  {'attr': {'class': 'flex justify-around'}})}}
+						{{form_errors(form.status)}}
+						{{ form_widget(form.status) }}
+						{{ form_widget(form.Search) }}
+						{{ form_end(form) }} #}
+						{# <input type="text" placeholder="Rechercher par téléphone" class="w-full p-2 border rounded"> #}
+					</div>
+					<table class="min-w-full leading-normal">
+						<thead>
+							<tr>
+								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
+									ID
+								</th>
+								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
+									Date
+								</th>
+								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
+									Montant
+								</th>
+								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
+									Montant Versé
+								</th>
+								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
+									Status
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for dette in client.dettes %}
+								<tr>
+									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+										<p class="text-gray-900 whitespace-no-wrap">{{dette.id}}</p>
+									</td>
+									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+										<p class="text-gray-900 whitespace-no-wrap">{{dette.data ? dette.data|date('Y-m-d') : 'N/A'}}</p>
+									</td>
+									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+										<p class="text-gray-900 whitespace-no-wrap">{{dette.montant}}</p>
+									</td>
+									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+										<p class="text-gray-900 whitespace-no-wrap">{{dette.montantVerser}}</p>
+									</td>
+									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+										<p class="text-red-600 whitespace-no-wrap">{{dette.status.name}}</p>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<div class="mt-4 flex justify-end">
+					<p class="text-xl font-semibold ">Total restant à payer :
+						<span class="text-red-600">1500 €</span>
+					</p>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<!-- Footer -->
+	<footer class="bg-[#1E375A] text-white p-4 text-center">
+		<p>&copy; 2023 Gestion des Clients. Tous droits réservés.</p>
+	</footer>
+
+{% endblock %}

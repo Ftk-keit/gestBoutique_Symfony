@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use App\enum\StatusDette;
 use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -31,6 +34,20 @@ class Client
     #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist', 'remove'])]
     private ?User $account = null;
 
+    
+
+    /**
+     * @var Collection<int, Dette>
+     */
+    #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client')]
+    private Collection $dettes;
+
+    public function __construct()
+    {
+        $this->dettes = new ArrayCollection();
+
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +69,9 @@ class Client
     {
         return $this->telephone;
     }
+
+
+   
 
     public function setTelephone(string $telephone): static
     {
@@ -90,6 +110,36 @@ class Client
         }
 
         $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dette>
+     */
+    public function getDettes(): Collection
+    {
+        return $this->dettes;
+    }
+
+    public function addDette(Dette $dette): static
+    {
+        if (!$this->dettes->contains($dette)) {
+            $this->dettes->add($dette);
+            $dette->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDette(Dette $dette): static
+    {
+        if ($this->dettes->removeElement($dette)) {
+            // set the owning side to null (unless already changed)
+            if ($dette->getClient() === $this) {
+                $dette->setClient(null);
+            }
+        }
 
         return $this;
     }
