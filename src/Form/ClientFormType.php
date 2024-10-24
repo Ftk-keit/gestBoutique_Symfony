@@ -70,7 +70,8 @@ class ClientFormType extends AbstractType
                         'message' => 'Ce champ ne peut être vide '
                     ]),
                 ]
-            ]);
+                ])
+             ->add('account', UserFormType::class);
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $client = $event->getData();

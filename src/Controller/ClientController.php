@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Dtos\ClientDto;
 use App\Entity\Client;
+use App\Entity\User;
 use App\Form\ClientFormType;
 use App\Form\DetteFilterType;
 use App\Form\SearchClientFormType;
+use App\Form\UserFormType;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,28 +28,23 @@ class ClientController extends AbstractController
     public function index(Request $request): Response
     {
         $client = new Client();
+        // $user = new User();
         $page = $request->query->getInt('page',1);
         $limit = 5;
         $clients = $this->clientRepository->paginateClients(   $page, $limit);
+        $clientDto = new ClientDto();
       
 
-        // $data = array_map(function($client) {
-        //     return [
-        //         'id' => $client->getId(),
-        //         'surname' => $client->getSurname(),
-        //         'telephone' => $client->getTelephone(),
-        //         'adresse' => $client->getAdresse(),
-        //     ];
-        // }, iterator_to_array($clients->getIterator()));
-        
+        // Creation des formulaires : client-User-SearchClient
+
         $form = $this->createForm(ClientFormType::class, $client);
-        $clientDto = new ClientDto();
+
+        // $formUser = $this->createForm(UserFormType::class, $user);
+
         $formSearch = $this->createForm(SearchClientFormType::class, $clientDto);
+
         $formSearch->handleRequest($request);
-
-
         
-
         if ($formSearch->isSubmitted() && $formSearch->isValid()) { 
             // $formSearch->get('telephone')->getData()
             $clients = $this->clientRepository->findByClient($clientDto, $page, $limit);
