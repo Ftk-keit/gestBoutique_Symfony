@@ -3,5 +3,5 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
-live_component:
-    ressoure : '@LiveComponentBundle/Ressources/config/routing/live_component.xml'
+# live_component:
+#     resource : '@LiveComponentBundle/Ressources/config/routing/live_component.xml'

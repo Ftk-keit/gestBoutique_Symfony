@@ -19,9 +19,9 @@ class DetteFilterType extends AbstractType
         $builder
             ->add('status' , ChoiceType::class, [
                 'choices' => [
-                    'Tous' => null,
-                    'Paye'=> StatusDette::Payé,
-                    'Impayé'=> StatusDette::Impayé,
+                    'Tous' => StatusDette::All->value,
+                    'Paye'=> StatusDette::Paye->value,
+                    'Impaye'=> StatusDette::Impaye->value,
                 ],
                 'attr' => [
                     'class' => 'block w-full md:w-64 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-base focus:border-base'

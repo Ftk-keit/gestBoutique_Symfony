@@ -2,7 +2,11 @@
 
 namespace App\Form;
 
+use App\EventSubscriber\ClientFormSubscriber;
+use phpDocumentor\Reflection\Types\Void_;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Event\PreSubmitEvent;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvent;
@@ -12,7 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Entity\Client;
-use App\Form\Subscriber\ClientFormSubscriber;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Regex; 
@@ -71,18 +74,38 @@ class ClientFormType extends AbstractType
                     ]),
                 ]
                 ])
-             ->add('account', UserFormType::class);
+                ->add("addAccount", CheckboxType::class,[
+                    'label'=> 'Ajouter un compte ?',
+                    'attr' => [
+                        'placeholder' => '',
+                        'class' => 'form-checkbox h-5 w-5 text-base',
+                    ],
+                    'required' => false,
+                    'mapped' => false,
+                    'property_path' => 'addAccount'
+                ]
+                )
+                ->addEventSubscriber(new ClientFormSubscriber);
+              
+            //  ->add('account', UserFormType::class)
+            //  ->addEventListener(FormEvents::PRE_SUBMIT, function(PreSubmitEvent $event) : void {
+            //     $data = $event->getData();
+            //     $form = $event->getForm();
+            //     if (isset($data["addAccount"]) && $data["addAccount"] == "1") {
+            //         $form->add("account", UserFormType::class);
+            //     }
+            //  });
 
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-            $client = $event->getData();
-            $form = $event->getForm();
+        // $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+        //     $client = $event->getData();
+        //     $form = $event->getForm();
 
-            if ($client) {
-                $client->setSurname(strtoupper($client->getSurname())); 
-            }
-        });
+        //     if ($client) {
+        //         $client->setSurname(strtoupper($client->getSurname())); 
+        //     }
+        // });
 
-        $builder->addEventSubscriber(new ClientFormSubscriber());
+        // $builder->addEventSubscriber(new ClientFormSubscriber());
     }
 
     public function configureOptions(OptionsResolver $resolver): void

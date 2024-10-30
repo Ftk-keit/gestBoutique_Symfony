@@ -35,11 +35,11 @@
 				class="flex gap-4">
 				<!-- Client Creation Form -->
 				<div class="w-1/2">
-					<h2 class="text-xl font-semibold mb-4">Créer un nouveau client</h2>
-					<form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="post" action="{{ path('client_new') }}">
+					<h2 class="text-xl font-semibold mb-4 ">Créer un nouveau client</h2>
+					<form id="form_client" class="bg-white shadow-md rounded px-8 pt-6  mb-4" method="post" action="{{ path('client_new') }}">
 						{{ form_start(form) }}
 
-						<div class="mb-4">
+						<div class="mb-1">
 							{{ form_label(form.surname) }}
 							{{ form_widget(form.surname) }}
 							<div class="text-red-500 text-xs italic">
@@ -47,7 +47,7 @@
 							</div>
 						</div>
 
-						<div class="mb-4">
+						<div class="mb-1">
 							{{ form_label(form.telephone) }}
 							{{ form_widget(form.telephone) }}
 							<div class="text-red-500 text-xs italic">
@@ -55,7 +55,7 @@
 							</div>
 						</div>
 
-						<div class="mb-4">
+						<div class="mb-1">
 							{{ form_label(form.adresse) }}
 							{{ form_widget(form.adresse) }}
 							<div class="text-red-500 text-xs italic">
@@ -64,44 +64,57 @@
 						</div>
 						{# {{ form_start(form.account) }} #}
 
-						<div class="mb-4">
-							{{ form_label(form.account.nom) }}
-							{{ form_widget(form.account.nom) }}
+						<div class="mb-1">
+							{{ form_label(form.addAccount) }}
+							{{ form_widget(form.addAccount) }}
 							<div
 								class="text-red-500 text-xs italic">{# {{ form_errors(form.adresse) }} #}
+							</div>
+						</div>
+						<div id="form_user">
+							<div class="mb-1">
+								{% if form.account is defined %}
+									{{ form_label(form.account.nom) }}
+									{{ form_widget(form.account.nom) }}
+								{% endif %}
+								{% if error_user is defined and error_user.nom is not null %}
+									<div class="text-red-500 text-xs italic">{{ error_user.nom }}</div>
+								{% endif %}
+							</div>
+
+							<div class="mb-1">
+								{% if form.account is defined %}
+									{{ form_label(form.account.prenom) }}
+									{{ form_widget(form.account.prenom) }}
+								{% endif %}
+								{% if error_user is defined and error_user.prenom is not null %}
+									<div class="text-red-500 text-xs italic">{{ error_user.prenom }}</div>
+								{% endif %}
+							</div>
+
+							<div class="mb-1">
+								{% if form.account is defined %}
+									{{ form_label(form.account.login) }}
+									{{ form_widget(form.account.login) }}
+								{% endif %}
+							</div>
+
+							<div class="mb-1">
+								{% if form.account is defined %}
+									{{ form_label(form.account.password) }}
+									{{ form_widget(form.account.password) }}
+								{% endif %}
+							</div>
+
+							<div class="mb-4">
+								{% if form.account is defined %}
+									{{ form_label(form.account.isActive) }}
+									{{ form_widget(form.account.isActive) }}
+								{% endif %}
 							</div>
 						</div>
 
-						<div class="mb-4">
-							{{ form_label(form.account.prenom) }}
-							{{ form_widget(form.account.prenom) }}
-							<div
-								class="text-red-500 text-xs italic">{# {{ form_errors(form.adresse) }} #}
-							</div>
-						</div>
 
-						<div class="mb-4">
-							{{ form_label(form.account.login) }}
-							{{ form_widget(form.account.login) }}
-							<div
-								class="text-red-500 text-xs italic">{# {{ form_errors(form.adresse) }} #}
-							</div>
-						</div>
-
-						<div class="mb-4">
-							{{ form_label(form.account.password) }}
-							{{ form_widget(form.account.password) }}
-							<div
-								class="text-red-500 text-xs italic">{# {{ form_errors(form.adresse) }} #}
-							</div>
-						</div>
-						<div class="mb-4">
-							{{ form_label(form.account.isActive) }}
-							{{ form_widget(form.account.isActive) }}
-							<div
-								class="text-red-500 text-xs italic">{# {{ form_errors(form.adresse) }} #}
-							</div>
-						</div>
 						{# {{ form_end(form.account) }} #}
 
 
@@ -166,21 +179,23 @@
 								<li class="mb-2 pb-2 border-b">Aucun client trouvé.</li>
 							{% endfor %}
 						</ul>
+
+
 						<div class="mt-4 flex justify-center">
-							<nav class="inline-flex rounded-md shadow">
+						<nav class="inline-flex rounded-md shadow">
 								 {% if page > 1 %}
-                                <a href="?page={{page - 1}} " class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                 <a href="{{ path('app_client', { page: page - 1 }) }}" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                                     <<< 
                                 </a>
 								{% endif %}
 
 								{% for i in 1..maxPage %}
-                                <a href="?page={{i}} " class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                  <a href="{{ path('app_client', { page: i}) }}" class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
                                     {{ i }}
                                 </a>
 								{% endfor %}
                                 {% if page <  maxPage %}
-                                <a href="?page={{page + 1}} " class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                  <a href="{{ path('app_client', { page: page + 1 }) }}" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                                     >>> 
                                 </a>
 								{% endif %}
@@ -194,7 +209,7 @@
 	</div>
 
 	<!-- Footer -->
-	<footer class="bg-[#1E375A] text-white p-4 text-center">
+	<footer class="bg-[#1E375A]  text-white p-4 text-center">
 		<p>&copy; 2023 Gestion des Clients. Tous droits réservés.</p>
 	</footer>
 

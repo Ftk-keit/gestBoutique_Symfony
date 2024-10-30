@@ -21,6 +21,7 @@ class UserFormType extends AbstractType
                     'placeholder' => 'Nom de l\'utilisateur',
                     'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
                 ],
+                'required' => false,
                 
             ])
             ->add('prenom',TextType::class, [
@@ -29,6 +30,7 @@ class UserFormType extends AbstractType
                     'placeholder' => 'Prenom de l\'utilisateur',
                     'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
                 ],
+                'required' => false,
             ])
             ->add('login', TextType::class, [
                 'label'=> 'Login',
@@ -36,7 +38,7 @@ class UserFormType extends AbstractType
                     'placeholder' => 'Email de l\'utilisateur',
                     'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
                 ],
-                
+                'required' => false,
             ])
 
             ->add('password', TextType::class, [
@@ -45,6 +47,7 @@ class UserFormType extends AbstractType
                     'placeholder' => 'Password',
                     'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
                 ],
+                'required' => false,
             ])
             ->add('isActive', CheckboxType::class,[
                 'label'=> 'Compte active ?',
@@ -52,6 +55,7 @@ class UserFormType extends AbstractType
                     'placeholder' => '',
                     'class' => 'form-checkbox h-5 w-5 text-base',
                 ],
+                'required' => false,
                 'property_path' => 'isActive'
             ]
             )

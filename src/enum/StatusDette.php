@@ -3,6 +3,7 @@
 namespace App\enum;
 
 enum StatusDette : String {
-    case Impayé = "Impayé";
-    case Payé = "Payé";
+    case Impaye = "Impaye";
+    case All = "All";
+    case Paye = "Paye";
 }

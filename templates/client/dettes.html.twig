@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+{% set restant = 0%}
 	<!-- Header -->
 	<header class="bg-[#1E375A] text-white p-4">
 		<h1 class="text-2xl font-bold">Gestion des Clients</h1>
@@ -54,12 +55,12 @@
 					</div>
 				</div>
 				<div class="mb-4">
-				{{form_start(form, {'attr': {'class': 'flex , justify-start'}})}}
+				{{form_start(form, {'attr': {'class': 'flex , justify-start'}}, { method: "GET" })}}
 				{{ form_widget(form.status) }}
 				{{ form_end(form) }}
 					{# <button id="all" class="bg-[#1E375A] text-white px-4 py-2 rounded mr-2">Toutes</button>
-					<button id="unpaid" class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Impayées</button>
-					<button id="paid" class="bg-gray-300 text-gray-700 px-4 py-2 rounded">Payées</button> #}
+					<button id="unpaid" class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Impayees</button>
+					<button id="paid" class="bg-gray-300 text-gray-700 px-4 py-2 rounded">Payees</button> #}
 				</div>
 				<!-- Tableau des dettes -->
 				<div class="overflow-x-auto bg-white shadow-md rounded-lg">
@@ -92,7 +93,8 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for dette in client.dettes %}
+							{% for dette in dettes %}
+							  {% set restant = restant + (dette.montant - dette.montantVerser) %}
 								<tr>
 									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
 										<p class="text-gray-900 whitespace-no-wrap">{{dette.id}}</p>
@@ -107,19 +109,42 @@
 										<p class="text-gray-900 whitespace-no-wrap">{{dette.montantVerser}}</p>
 									</td>
 									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-										<p class="text-red-600 whitespace-no-wrap">{{dette.status.name}}</p>
+										<p class="text-red-600 whitespace-no-wrap">{{dette.montant == dette.montantVerser ? "Paye" : "Impaye"}}</p>
 									</td>
 								</tr>
 							{% endfor %}
 						</tbody>
 					</table>
+					
 				</div>
+				      <div class="mt-4 flex justify-center">
+							<nav class="inline-flex rounded-md shadow">
+								 {% if page > 1 %}
+                                <a href="?page={{page - 1}}&statuts={{statuts}} " class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <<< 
+                                </a>
+								{% endif %}
+
+								{% for i in 1..maxPage %}
+									<a href="?page={{i}}&statuts={{statuts}} " class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+										{{ i }}
+									</a>
+								{% endfor %}
+                                {% if page <  maxPage %}
+                                <a href="?page={{page + 1}}&statuts={{statuts}} " class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    >>> 
+                                </a>
+								{% endif %}
+							</nav>
+						</div>
 				<div class="mt-4 flex justify-end">
 					<p class="text-xl font-semibold ">Total restant à payer :
-						<span class="text-red-600">1500 €</span>
+						<span class="text-red-600"> {{restant}} Fcfa</span>
 					</p>
 				</div>
+				
 			</div>
+			
 		</main>
 	</div>
 

@@ -22,13 +22,13 @@ class Dette
     private ?int $montant = null;
 
     #[ORM\Column]
-    private ?int $montanVerser = null;
+    private ?int $montantVerser = null;
 
     #[ORM\ManyToOne(inversedBy: 'dettes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
-    private StatusDette $status = StatusDette::Impayé;
+    private StatusDette $status = StatusDette::Impaye;
     
 
     public function __construct() {
@@ -65,8 +65,8 @@ class Dette
 
     public function getStatus(): ?StatusDette
     {
-        if ( $this->montanVerser != 0 && $this->montant === $this->montanVerser) { 
-            $this->status = StatusDette::Payé;
+        if ( $this->montantVerser != 0 && $this->montant === $this->montantVerser) { 
+            $this->status = StatusDette::Paye;
         }
         return $this->status;
     }
@@ -80,12 +80,12 @@ class Dette
 
     public function getMontantVerser(): ?int
     {
-        return $this->montanVerser;
+        return $this->montantVerser;
     }
 
-    public function setMontantVerser(int $montanVerser): static
+    public function setMontantVerser(int $montantVerser): static
     {
-        $this->montanVerser = $montanVerser;
+        $this->montantVerser = $montantVerser;
 
         return $this;
     }
