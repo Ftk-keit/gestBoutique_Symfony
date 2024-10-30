@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Entity;
-
-use App\enum\StatusDette;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -41,6 +39,8 @@ class Client
      */
     #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client')]
     private Collection $dettes;
+
+   
 
     public function __construct()
     {
@@ -143,4 +143,6 @@ class Client
 
         return $this;
     }
+
+   
 }
