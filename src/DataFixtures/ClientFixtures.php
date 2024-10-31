@@ -39,7 +39,7 @@ class ClientFixtures extends Fixture
                     $user,
                     $plaintextPassword
                 );
-                $user->setPassword($plaintextPassword);
+                $user->setPassword($hashedPassword);
                 $user->setLogin('Login'.$i);
                 $user->setActive(true);
                 $client->setAccount($user);

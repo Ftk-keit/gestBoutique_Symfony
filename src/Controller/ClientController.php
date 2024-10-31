@@ -12,6 +12,7 @@ use App\Form\SearchClientFormType;
 use App\Form\UserFormType;
 use App\Repository\ClientRepository;
 use App\Repository\DetteRepository;
+use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,9 +33,13 @@ class YourController extends AbstractController
 class ClientController extends AbstractController
 {
 
+    private $mailService;
+
+     
     private $clientRepository;
-    public function __construct(ClientRepository $clientRepository)
+    public function __construct(MailService $mailService, ClientRepository $clientRepository)
     {
+        $this->mailService = $mailService;
         $this->clientRepository = $clientRepository;
     }
     #[Route('/client', name: 'app_client')]
@@ -129,7 +134,15 @@ class ClientController extends AbstractController
                     'page' => $page,
                 ]);
             }
-
+            
+           if ($client->getAccount() != null) {
+            $content = sprintf(
+                "Your login information:\n\nLogin: %s\nPassword: %s",
+                $client->getAccount()->getlogin(),
+                $client->getAccount()->getPassword()
+            );
+            $this->mailService->sendEmail( $client->getAccount()->getlogin(), 'Your information', $content);
+           }
             $entityManagerInterface->persist($client);
             $entityManagerInterface->flush();
 
