@@ -26,10 +26,10 @@ class DetteFormType extends AbstractType
             'choice_label' => 'surname',
             'label' => 'Client',
         ])
-        ->add('montant', MoneyType::class, [
-            'label' => 'Montant total',
-            'currency' => 'F',
-        ])
+        // ->add('montant', MoneyType::class, [
+        //     'label' => 'Montant total',
+        //     'currency' => 'F',
+        // ])
         ->add('detailArticleDettes', CollectionType::class, [
             'entry_type' => DetailArticleDetteFormType::class,
             'allow_add' => true,

@@ -12,25 +12,7 @@
 	<div
 		class="flex flex-1 h-[850px]">
 		<!-- Sidebar -->
-		<nav class="w-64 bg-[#1E375A] text-white p-4">
-			<ul>
-				<li class="mb-2">
-					<a href="#" class="hover:text-gray-300">Tableau de bord</a>
-				</li>
-				<li class="mb-2">
-					<a href="/client" class="hover:text-gray-300">Clients</a>
-				</li>
-				<li class="mb-2">
-					<a href="/dettes" class="hover:text-gray-300">Dettes</a>
-				</li>
-				<li class="mb-2">
-					<a href="/dette/new	" class="hover:text-gray-300">Nouvelle dette</a>
-				</li>
-				<li class="mb-2">
-					<a href="#" class="hover:text-gray-300">Commandes</a>
-				</li>
-			</ul>
-		</nav>
+		<twig:Navigation />
 
 		<!-- Main Content -->
 		<main class="flex-1 p-4">
@@ -109,12 +91,12 @@
 								{% endif %}
 							</div>
 
-							<div class="mb-4">
+							{# <div class="mb-4">
 								{% if form.account is defined %}
 									{{ form_label(form.account.isActive) }}
 									{{ form_widget(form.account.isActive) }}
 								{% endif %}
-							</div>
+							</div> #}
 						</div>
 
 

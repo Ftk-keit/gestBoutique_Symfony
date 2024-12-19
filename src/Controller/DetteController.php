@@ -115,7 +115,7 @@ class DetteController extends AbstractController
             }
             
             $dette->setMontant($montant);
-    
+            $dette->setMontantVerser($montantVerser === null ? 0 : $montantVerser);
             if ($montantVerser > 0) {
                 $payement = new Payement();
                 $payement->setMontant($montantVerser);
@@ -123,7 +123,7 @@ class DetteController extends AbstractController
                 $payement->setDette($dette);
                 
                 $dette->addPayement($payement);
-                $dette->setMontantVerser($montantVerser);
+                // $dette->setMontantVerser($montantVerser);
     
                 if ($montantVerser >= $dette->getMontant()) {
                     $dette->setStatus(StatusDette::Paye);

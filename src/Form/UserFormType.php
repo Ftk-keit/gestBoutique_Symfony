@@ -59,16 +59,16 @@ class UserFormType extends AbstractType
                 ],
                 'required' => false,
             ])
-            ->add('isActive', CheckboxType::class,[
-                'label'=> 'Compte active ?',
-                'attr' => [
-                    'placeholder' => '',
-                    'class' => 'form-checkbox h-5 w-5 text-base',
-                ],
-                'required' => false,
-                'property_path' => 'isActive'
-            ]
-            )
+            // ->add('isActive', CheckboxType::class,[
+            //     'label'=> 'Compte active ?',
+            //     'attr' => [
+            //         'placeholder' => '',
+            //         'class' => 'form-checkbox h-5 w-5',
+            //     ],
+            //     'required' => false,
+            //     // 'property_path' => 'isActive'
+            // ]
+            // )
             // ->add('client', EntityType::class, [
             //     'class' => Client::class,
             //     'choice_label' => 'id',

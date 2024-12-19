@@ -10,25 +10,7 @@
 
     <div class="flex flex-1 h-[850px]">
         <!-- Sidebar -->
-        <nav class="w-64 bg-[#1E375A] text-white p-4">
-            <ul>
-                <li class="mb-2">
-                    <a href="#" class="hover:text-gray-300">Tableau de bord</a>
-                </li>
-                <li class="mb-2">
-                    <a href="/client" class="hover:text-gray-300">Clients</a>
-                </li>
-                <li class="mb-2">
-                    <a href="/dettes" class="hover:text-gray-300">Dettes</a>
-                </li>
-                <li class="mb-2">
-                    <a href="/dette/new" class="hover:text-gray-300">Nouvelle dette</a>
-                </li>
-                <li class="mb-2">
-                    <a href="/user/new" class="hover:text-gray-300">Nouvel utilisateur</a>
-                </li>
-            </ul>
-        </nav>
+        <twig:Navigation />
 
         <!-- Main Content -->
         <main class="flex-1 p-4">
@@ -59,11 +41,11 @@
                     {{ form_errors(form.password) }}
                 </div>
 
-                <div class="mb-4">
+                {# <div class="mb-4">
                     {{ form_label(form.isActive, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
-                    {{ form_widget(form.isActive, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                    {{ form_widget(form.isActive, {'attr': {'class': 'shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline'}}) }}
                     {{ form_errors(form.isActive) }}
-                </div>
+                </div> #}
 
                 <div class="flex items-center justify-between">
                     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">

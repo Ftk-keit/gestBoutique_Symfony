@@ -10,25 +10,7 @@
 
     <div class="flex flex-1 h-[850px]">
         <!-- Sidebar -->
-        <nav class="w-64 bg-[#1E375A] text-white p-4">
-            <ul>
-                <li class="mb-2">
-                    <a href="#" class="hover:text-gray-300">Tableau de bord</a>
-                </li>
-                <li class="mb-2">
-                    <a href="/client" class="hover:text-gray-300">Clients</a>
-                </li>
-                <li class="mb-2">
-                    <a href="/dettes" class="hover:text-gray-300">Dettes</a>
-                </li>
-                <li class="mb-2">
-                    <a href="/dette/new" class="hover:text-gray-300">Nouvelle dette</a>
-                </li>
-                <li class="mb-2">
-                    <a href="#" class="hover:text-gray-300">Commandes</a>
-                </li>
-            </ul>
-        </nav>
+        <twig:Navigation />
 
         <!-- Main Content -->
         <main class="flex-1 p-4">
@@ -44,12 +26,6 @@
                         {{ form_label(form.client, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
                         {{ form_widget(form.client, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
                         {{ form_errors(form.client) }}
-                    </div>
-
-                    <div class="mb-4">
-                        {{ form_label(form.montant, null, {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
-                        {{ form_widget(form.montant, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
-                        {{ form_errors(form.montant) }}
                     </div>
 
                     <div class="mb-4">

@@ -37,10 +37,10 @@ class UserController extends AbstractController
             $user->setPassword($hashedPassword);
 
             // Set a default role if not set
-            if (empty($user->getRoles())) {
-                $user->setRoles(['ROLE_USER']);
-            }
-
+            // if (empty($user->getRoles())) {
+                $user->setRoles(['Client']);
+            // }
+            $user->setActive(true);
             $entityManager->persist($user);
             $entityManager->flush();
 
