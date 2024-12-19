@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\enum\StatusDette;
 use App\Repository\DetteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,10 +31,24 @@ class Dette
     private ?Client $client = null;
 
     private StatusDette $status = StatusDette::Impaye;
+
+    /**
+     * @var Collection<int, DetailArticleDette>
+     */
+    #[ORM\OneToMany(targetEntity: DetailArticleDette::class, mappedBy: 'dette', cascade: ['persist'])]
+    private Collection $detailArticleDettes;
+
+    /**
+     * @var Collection<int, Payement>
+     */
+    #[ORM\OneToMany(targetEntity: Payement::class, mappedBy: 'dette', cascade: ['persist'])]
+    private Collection $payements;
     
 
-    public function __construct() {
-       
+    public function __construct()
+    {
+        $this->detailArticleDettes = new ArrayCollection();
+        $this->payements = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -98,6 +114,66 @@ class Dette
     public function setClient(?Client $client): static
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DetailArticleDette>
+     */
+    public function getDetailArticleDettes(): Collection
+    {
+        return $this->detailArticleDettes;
+    }
+
+    public function addDetailArticleDette(DetailArticleDette $detailArticleDette): static
+    {
+        if (!$this->detailArticleDettes->contains($detailArticleDette)) {
+            $this->detailArticleDettes->add($detailArticleDette);
+            $detailArticleDette->setDette($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDetailArticleDette(DetailArticleDette $detailArticleDette): static
+    {
+        if ($this->detailArticleDettes->removeElement($detailArticleDette)) {
+            // set the owning side to null (unless already changed)
+            if ($detailArticleDette->getDette() === $this) {
+                $detailArticleDette->setDette(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payement>
+     */
+    public function getPayements(): Collection
+    {
+        return $this->payements;
+    }
+
+    public function addPayement(Payement $payement): static
+    {
+        if (!$this->payements->contains($payement)) {
+            $this->payements->add($payement);
+            $payement->setDette($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayement(Payement $payement): static
+    {
+        if ($this->payements->removeElement($payement)) {
+            // set the owning side to null (unless already changed)
+            if ($payement->getDette() === $this) {
+                $payement->setDette(null);
+            }
+        }
 
         return $this;
     }

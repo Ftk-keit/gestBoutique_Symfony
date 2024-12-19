@@ -18,12 +18,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Entity\Client;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Regex; 
-
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfonycasts\DynamicForms\DynamicFormBuilder;
+use Symfonycasts\DynamicForms\DependentField;
 class ClientFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder = new DynamicFormBuilder($builder);
         $builder
             ->add('surname', TextType::class, [
                 'required' => false,
@@ -33,7 +35,7 @@ class ClientFormType extends AbstractType
                     'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
                 ],
                 'constraints' => [
-                  
+
                     new NotNull([
                         'message' => 'Ce champ ne peut être vide '
                     ]),
@@ -49,7 +51,7 @@ class ClientFormType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message'=> 'Veuillez saisir un numero valide'
+                        'message' => 'Veuillez saisir un numero valide'
                     ]),
                     new NotNull([
                         'message' => 'Ce champ ne peut être vide '
@@ -73,9 +75,12 @@ class ClientFormType extends AbstractType
                         'message' => 'Ce champ ne peut être vide '
                     ]),
                 ]
-                ])
-                ->add("addAccount", CheckboxType::class,[
-                    'label'=> 'Ajouter un compte ?',
+            ])
+            ->add(
+                "addAccount",
+                CheckboxType::class,
+                [
+                    'label' => 'Ajouter un compte ?',
                     'attr' => [
                         'placeholder' => '',
                         'class' => 'form-checkbox h-5 w-5 text-base',
@@ -84,17 +89,26 @@ class ClientFormType extends AbstractType
                     'mapped' => false,
                     'property_path' => 'addAccount'
                 ]
-                )
-                ->addEventSubscriber(new ClientFormSubscriber);
-              
-            //  ->add('account', UserFormType::class)
-            //  ->addEventListener(FormEvents::PRE_SUBMIT, function(PreSubmitEvent $event) : void {
-            //     $data = $event->getData();
-            //     $form = $event->getForm();
-            //     if (isset($data["addAccount"]) && $data["addAccount"] == "1") {
-            //         $form->add("account", UserFormType::class);
-            //     }
-            //  });
+            )
+            ->addDependent('account', 'addAccount', function(DependentField $field, $value) {
+                if ($value === true) {
+                    $field->add(UserFormType::class, [
+                        'label' => false,
+                        'required' => true,
+                    ]);
+                }
+            });
+        ;
+        // ->addEventSubscriber(new ClientFormSubscriber);
+
+        //  ->add('account', UserFormType::class)
+        //  ->addEventListener(FormEvents::PRE_SUBMIT, function(PreSubmitEvent $event) : void {
+        //     $data = $event->getData();
+        //     $form = $event->getForm();
+        //     if (isset($data["addAccount"]) && $data["addAccount"] == "1") {
+        //         $form->add("account", UserFormType::class);
+        //     }
+        //  });
 
         // $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
         //     $client = $event->getData();

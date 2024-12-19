@@ -22,7 +22,10 @@
 					<a href="/client" class="hover:text-gray-300">Clients</a>
 				</li>
 				<li class="mb-2">
-					<a href="#" class="hover:text-gray-300">Produits</a>
+					<a href="/dettes" class="hover:text-gray-300">Dettes</a>
+				</li>
+				<li class="mb-2">
+					<a href="/dette/new	" class="hover:text-gray-300">Nouvelle dette</a>
 				</li>
 				<li class="mb-2">
 					<a href="#" class="hover:text-gray-300">Commandes</a>
@@ -73,48 +76,121 @@
 						{# <input type="text" placeholder="Rechercher par téléphone" class="w-full p-2 border rounded"> #}
 					</div>
 					<table class="min-w-full leading-normal">
-						<thead>
-							<tr>
-								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
-									ID
-								</th>
-								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
-									Date
-								</th>
-								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
-									Montant
-								</th>
-								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
-									Montant Versé
-								</th>
-								<th class="px-5 py-3 border-b-2 border-gray-200 bg-base text-left text-xs font-semibold  uppercase tracking-wider">
-									Status
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for dette in dettes %}
-							  {% set restant = restant + (dette.montant - dette.montantVerser) %}
-								<tr>
-									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-										<p class="text-gray-900 whitespace-no-wrap">{{dette.id}}</p>
-									</td>
-									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-										<p class="text-gray-900 whitespace-no-wrap">{{dette.data ? dette.data|date('Y-m-d') : 'N/A'}}</p>
-									</td>
-									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-										<p class="text-gray-900 whitespace-no-wrap">{{dette.montant}}</p>
-									</td>
-									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-										<p class="text-gray-900 whitespace-no-wrap">{{dette.montantVerser}}</p>
-									</td>
-									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-										<p class="text-red-600 whitespace-no-wrap">{{dette.montant == dette.montantVerser ? "Paye" : "Impaye"}}</p>
-									</td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+                    <thead>
+                        <tr>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                ID
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Montant
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Montant Versé
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Détails
+                            </th>
+							<th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Payement
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dette in dettes %}
+                            {% set restant = restant + (dette.montant - dette.montantVerser) %}
+                            <tr class="dette-row" data-dette-id="{{ dette.id }}">
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{dette.id}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{dette.data ? dette.data|date('Y-m-d') : 'N/A'}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{dette.montant}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">{{dette.montantVerser}}</p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold {% if dette.montant == dette.montantVerser %}text-green-900{% else %}text-red-900{% endif %} leading-tight">
+                                        <span aria-hidden class="absolute inset-0 {% if dette.montant == dette.montantVerser %}bg-green-200{% else %}bg-red-200{% endif %} opacity-50 rounded-full"></span>
+                                        <span class="relative">{{dette.montant == dette.montantVerser ? "Payé" : "Impayé"}}</span>
+                                    </span>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <button class="toggle-details bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                        Voir détails
+                                    </button>
+                                </td>
+
+								 <td class="px-4 py-2">
+                                        {% if dette.status != constant('App\\Enum\\StatusDette::Paye') %}
+                                            <form action="{{ path('app_detteClient_payment', {'id': dette.id}) }}" method="post" class="flex items-center">
+                                                <input type="number" name="payement[montant]" required min="1" max="{{ dette.montant - dette.montantVerser }}" class="w-20 p-1 border rounded mr-2">
+                                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                                                    Payer
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <span class="text-green-600">Payé</span>
+                                        {% endif %}
+                                    </td>
+                            </tr>
+                            <tr class="dette-details hidden" data-dette-id="{{ dette.id }}">
+                                <td colspan="6" class="px-5 py-5 border-b border-gray-200 bg-gray-50">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <h3 class="font-bold text-lg mb-2">Articles</h3>
+                                            <table class="min-w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="px-4 py-2 text-left">Nom</th>
+                                                        <th class="px-4 py-2 text-left">Quantité</th>
+                                                        <th class="px-4 py-2 text-left">Prix</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for detailArticle in dette.detailArticleDettes %}
+                                                        <tr>
+                                                            <td class="px-4 py-2">{{ detailArticle.article.libelle }}</td>
+                                                            <td class="px-4 py-2">{{ detailArticle.qte }}</td>
+                                                            <td class="px-4 py-2">{{ detailArticle.total }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-lg mb-2">Paiements</h3>
+                                            <table class="min-w-full">
+                                                <thead>
+                                                    <tr>
+                                                        {# <th class="px-4 py-2 text-left">Date</th> #}
+                                                        <th class="px-4 py-2 text-left">Montant</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for payement in dette.payements %}
+                                                        <tr>
+                                                            {# <td class="px-4 py-2">{{ payement.date|date('Y-m-d') }}</td> #}
+                                                            <td class="px-4 py-2">{{ payement.montant }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 					
 				</div>
 				      <div class="mt-4 flex justify-center">
@@ -154,3 +230,40 @@
 	</footer>
 
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButtons = document.querySelectorAll('.toggle-details');
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const detteId = this.closest('tr').dataset.detteId;
+            const detailsRow = document.querySelector(`.dette-details[data-dette-id="${detteId}"]`);
+            detailsRow.classList.toggle('hidden');
+            this.textContent = detailsRow.classList.contains('hidden') ? 'Voir détails' : 'Cacher détails';
+        });
+    });
+});
+</script>
+{% endblock %}
+

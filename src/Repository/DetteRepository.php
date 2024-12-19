@@ -21,8 +21,8 @@ class DetteRepository extends ServiceEntityRepository
     //    /**
     //     * @return Dette[] Returns an array of Dette objects
     //     */
-       public function findDettesById(int $id, string $status = Impaye , int $page, int $limit = null): Paginator
-       {
+    public function findDettesById(int $id, int $page, string $status = "Impaye", int $limit = null): Paginator
+    {
            $query = $this->createQueryBuilder('d')
                ->andWhere('d.client = :id')
                ->setParameter('id', $id);
@@ -38,7 +38,17 @@ class DetteRepository extends ServiceEntityRepository
                ->getQuery()
                ->getResult();
            return new Paginator($query);
-       }
+    }
+
+    public function findAllByPaginate(int $page, int $limit): Paginator
+    {
+        $query = $this->createQueryBuilder('d')
+            ->orderBy('d.id', 'DESC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery();
+        return new Paginator($query);
+    }
 
     //    public function findOneBySomeField($value): ?Dette
     //    {

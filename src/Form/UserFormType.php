@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 class UserFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -40,6 +41,15 @@ class UserFormType extends AbstractType
                 ],
                 'required' => false,
             ])
+            // ->add('roles', ChoiceType::class, [ 
+            //     'choices' => [ 
+            //         'Admin' => 'ROLE_ADMIN', 
+            //         'Boutiquier' => 'ROLE_BOUTIQUIER', 
+            //         'client' => 'ROLE_CLIENT', 
+            //     ], 
+            //     'multiple' => true, 
+            //     'expanded' => true, 
+            // ])
 
             ->add('password', TextType::class, [
                 'label'=> 'Password',

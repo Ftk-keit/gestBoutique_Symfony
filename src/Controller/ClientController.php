@@ -12,7 +12,7 @@ use App\Form\SearchClientFormType;
 use App\Form\UserFormType;
 use App\Repository\ClientRepository;
 use App\Repository\DetteRepository;
-use  App\Service\MailService;
+use App\Service\MailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,13 +33,14 @@ class YourController extends AbstractController
 class ClientController extends AbstractController
 {
 
-    private $mailService;
+    // private $mailService;
 
-     
+
     private $clientRepository;
-    public function __construct(MailService $mailService, ClientRepository $clientRepository)
+    //MailService $mailService,
+    public function __construct(ClientRepository $clientRepository)
     {
-        $this->mailService = $mailService;
+        // $this->mailService = $mailService;
         $this->clientRepository = $clientRepository;
     }
     #[Route('/client', name: 'app_client')]
@@ -89,6 +90,8 @@ class ClientController extends AbstractController
         $client->setAccount($user);
         $form = $this->createForm(ClientFormType::class, $client);
         $form->handleRequest($request);
+        $clientDto = new ClientDto();
+        $formSearch = $this->createForm(SearchClientFormType::class, $clientDto);
         // dd($form->get('addAccount')->getData());
         if ($form->isSubmitted()) {
             $error_client = $validator->validate($client);
@@ -112,18 +115,17 @@ class ClientController extends AbstractController
                 }
             }
 
-         
+
             $page = $request->query->getInt('page', 1);
             $limit = 5;
             $clients = $this->clientRepository->paginateClients($page, $limit);
-            $clientDto = new ClientDto();
-            $formSearch = $this->createForm(SearchClientFormType::class, $clientDto);
+
 
             $count = $clients->count();
             $maxPage = ceil($count / $limit);
 
             if ($error_user["nom"] != null || $error_user["prenom"] != null || count($error_client) > 0) {
-                // dd($error_user, $error_client);
+                //  dd($error_user, $error_client);
                 return $this->render('client/index.html.twig', [
                     'form' => $form->createView(),
                     'formSearch' => $formSearch->createView(),
@@ -134,15 +136,15 @@ class ClientController extends AbstractController
                     'page' => $page,
                 ]);
             }
-            
-           if ($client->getAccount() != null) {
-            $content = sprintf(
-                "Your login information:\n\nLogin: %s\nPassword: %s",
-                $client->getAccount()->getlogin(),
-                $client->getAccount()->getPassword()
-            );
-            $this->mailService->sendEmail( $client->getAccount()->getlogin(), 'Your information', $content);
-           }
+
+            if ($client->getAccount() != null) {
+                $content = sprintf(
+                    "Your login information:\n\nLogin: %s\nPassword: %s",
+                    $client->getAccount()->getlogin(),
+                    $client->getAccount()->getPassword()
+                );
+                // $this->mailService->sendEmail( $client->getAccount()->getlogin(), 'Your information', $content);
+            }
             $entityManagerInterface->persist($client);
             $entityManagerInterface->flush();
 
@@ -151,6 +153,7 @@ class ClientController extends AbstractController
 
         return $this->render('client/index.html.twig', [
             'form' => $form->createView(),
+            'formSearch' => $formSearch->createView(),
         ]);
     }
     #[Route('client/dettes/{idClient}', name: 'dettesbyClient', methods: "GET")]
@@ -172,7 +175,7 @@ class ClientController extends AbstractController
         }
         // dd($status);
 
-        $dettes = $detteRepository->findDettesById($idClient, $status, $page, $limit);
+        $dettes = $detteRepository->findDettesById($idClient,  $page, $status, $limit);
         $count = $dettes->count();
         $client = $clientRepository->find($idClient);
         $maxPage = ceil($count / $limit);

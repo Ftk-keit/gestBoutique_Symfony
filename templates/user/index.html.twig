@@ -1,20 +1,96 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}User Index{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <!-- Header -->
+    <header class="bg-[#1E375A] text-white p-4">
+        <h1 class="text-3xl font-bold">User Index</h1>
+    </header>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="flex flex-1 h-[850px]">
+        <!-- Sidebar -->
+        <nav class="w-64 bg-[#1E375A] text-white p-4">
+            <ul>
+                <li class="mb-2">
+                    <a href="#" class="hover:text-gray-300">Tableau de bord</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/client" class="hover:text-gray-300">Clients</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/dettes" class="hover:text-gray-300">Dettes</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/dette/new" class="hover:text-gray-300">Nouvelle dette</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/user" class="hover:text-gray-300">Utilisateurs</a>
+                </li>
+            </ul>
+        </nav>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/fatima/Documents/symfony/gestBoutique_Symfony/src/Controller/UserController.php</code></li>
-        <li>Your template at <code>/home/fatima/Documents/symfony/gestBoutique_Symfony/templates/user/index.html.twig</code></li>
-    </ul>
-</div>
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <div class="container mx-auto px-4 py-8 bg-white shadow-md rounded">
+                <!-- Create New Button -->
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold">Liste des Utilisateurs</h2>
+                    <a href="{{ path('app_user_new') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Créer un nouvel utilisateur
+                    </a>
+                </div>
+
+                <!-- User Table -->
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-700">
+                            <th class="py-2 px-4 border-b">ID</th>
+                            <th class="py-2 px-4 border-b">Login</th>
+                            <th class="py-2 px-4 border-b">Roles</th>
+                            <th class="py-2 px-4 border-b">Nom</th>
+                            <th class="py-2 px-4 border-b">Prénom</th>
+                            <th class="py-2 px-4 border-b">Statut</th>
+                            <th class="py-2 px-4 border-b">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b text-center">{{ user.id }}</td>
+                                <td class="py-2 px-4 border-b">{{ user.login }}</td>
+                                <td class="py-2 px-4 border-b">{{ user.roles ? user.roles|json_encode : '' }}</td>
+                                <td class="py-2 px-4 border-b">{{ user.nom }}</td>
+                                <td class="py-2 px-4 border-b">{{ user.prenom }}</td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    <span class="px-2 py-1 text-sm rounded {{ user.isActive ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
+                                        {{ user.isActive ? 'Actif' : 'Inactif' }}
+                                    </span>
+                                </td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    {# <a href="{{ path('app_user_show', {'id': user.id}) }}" class="text-blue-500 hover:underline mr-2">Afficher</a> #}
+                                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="text-yellow-500 hover:underline mr-2">Modifier</a>
+                                    <form method="post" action="{{ path('app_user_toggle_active', {'id': user.id}) }}" style="display: inline-block">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_active' ~ user.id) }}">
+                                        <button type="submit" class="text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline {{ user.isActive ? 'bg-red-500 hover:bg-red-700' : 'bg-green-500 hover:bg-green-700' }}">
+                                            {{ user.isActive ? 'Désactiver' : 'Activer' }}
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="py-4 text-center text-gray-500">Aucun utilisateur trouvé.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#1E375A] text-white p-4 text-center">
+        <p>&copy; 2023 Gestion des Utilisateurs. Tous droits réservés.</p>
+    </footer>
 {% endblock %}

@@ -40,11 +40,18 @@ class Client
     #[ORM\OneToMany(targetEntity: Dette::class, mappedBy: 'client')]
     private Collection $dettes;
 
+    /**
+     * @var Collection<int, DetteRequest>
+     */
+    #[ORM\OneToMany(targetEntity: DetteRequest::class, mappedBy: 'client')]
+    private Collection $detteRequests;
+
    
 
     public function __construct()
     {
         $this->dettes = new ArrayCollection();
+        $this->detteRequests = new ArrayCollection();
 
     }
 
@@ -138,6 +145,36 @@ class Client
             // set the owning side to null (unless already changed)
             if ($dette->getClient() === $this) {
                 $dette->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DetteRequest>
+     */
+    public function getDetteRequests(): Collection
+    {
+        return $this->detteRequests;
+    }
+
+    public function addDetteRequest(DetteRequest $detteRequest): static
+    {
+        if (!$this->detteRequests->contains($detteRequest)) {
+            $this->detteRequests->add($detteRequest);
+            $detteRequest->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDetteRequest(DetteRequest $detteRequest): static
+    {
+        if ($this->detteRequests->removeElement($detteRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($detteRequest->getClient() === $this) {
+                $detteRequest->setClient(null);
             }
         }
 
